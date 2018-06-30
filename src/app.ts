@@ -1,5 +1,3 @@
-import { AxiosResponse } from 'axios';
-
 import { filmwebSearchUri } from './config/filmwebConfig';
 import { scraperService } from './scraper/scraperService';
 
