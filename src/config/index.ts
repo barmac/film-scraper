@@ -1,0 +1,1 @@
+export { filmwebSearchUri } from './filmwebConfig';
