@@ -1,4 +1,4 @@
-import axios, { AxiosPromise, AxiosResponse, AxiosStatic } from 'axios';
+import axios, { AxiosResponse, AxiosStatic } from 'axios';
 
 export class ScraperService {
   constructor(private axios: AxiosStatic) { }
