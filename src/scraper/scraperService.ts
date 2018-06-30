@@ -1,10 +1,11 @@
-import axios, { AxiosPromise, AxiosStatic } from 'axios';
+import axios, { AxiosPromise, AxiosResponse, AxiosStatic } from 'axios';
 
 export class ScraperService {
   constructor(private axios: AxiosStatic) { }
 
-  getWebpage(baseUrl: string, params: { [param: string]: string | number} = {}): AxiosPromise<string> {
-    return this.axios.get<string>(baseUrl, { params });
+  getWebpage(baseUrl: string, params: { [param: string]: string | number} = {}): Promise<string> {
+    return this.axios.get<string>(baseUrl, { params })
+      .then((response: AxiosResponse<string>) => response.data);
   }
 }
 
