@@ -4,8 +4,21 @@
   "description": "A simple web scraper intended to seek and save Filmweb average movie ratings.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/app.js",
+    "build": "npm run lint && tsc",
+    "debug": "npm run build && npm run watch-debug",
+    "watch": "npm run watch-ts & nodemon dist/app.js",
+    "watch-debug": "npm run watch-ts && nodemon --inspect dist/app.js",
+    "watch-ts": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json"
   },
   "author": "Maciej Barelkowski",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "10.5.1",
+    "nodemon": "1.17.5",
+    "ts-node": "7.0.0",
+    "tslint": "5.10.0",
+    "typescript": "2.9.2"
+  }
 }
