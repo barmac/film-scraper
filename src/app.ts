@@ -1,10 +1,7 @@
-import { filmwebSearchUri } from './config/filmwebConfig';
-import { scraperService } from './scraper/scraperService';
+import { filmService } from './film';
 
-const params = { q: process.argv[2] };
+const title = process.argv[2];
 
-scraperService.getParsedWebpage(filmwebSearchUri, params)
-  .then((webpage: CheerioStatic) => {
-    console.log('webpage', webpage);
-  })
-  .catch(error => console.error('Error', error));
+filmService.getFilmByTitle(title)
+  .then(console.log)
+  .catch(error => console.error('error', error));
