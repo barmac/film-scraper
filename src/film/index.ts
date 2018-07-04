@@ -1,2 +1,2 @@
 export { Film } from './film';
-export { filmService } from './filmService';
+export { FilmService } from './filmService';

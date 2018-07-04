@@ -1,7 +1,8 @@
-import { filmService } from './film';
+import { FilmService } from './film';
 
+const filmService = new FilmService();
 const title = process.argv[2];
 
-filmService.getFilmByTitle(title)
+filmService.getFilm(title)
   .then(console.log)
   .catch(error => console.error('error', error));
