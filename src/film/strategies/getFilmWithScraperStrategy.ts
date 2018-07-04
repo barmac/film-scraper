@@ -9,12 +9,15 @@ import { ScraperService } from '../../scraper';
 const resultsQuery = '.resultsList .hits__item .dataHit';
 const ratingsQuery = '.resultsList .hits__item .filmPreview__rateBox';
 
-
 export class GetFilmWithScraperStrategy implements GetFilmStrategy {
   private baseUri: string;
   private scraper: ScraperService;
 
   constructor() {
+    if (!filmwebSearchUri) {
+      throw new Error('Base uri cannot be undefined');
+    }
+
     this.baseUri = filmwebSearchUri;
     this.scraper = new ScraperService(axios, cheerio);
   }

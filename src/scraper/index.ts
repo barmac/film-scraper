@@ -1,1 +1,1 @@
-export { scraperService, ScraperService } from './scraperService';
+export { ScraperService } from './scraperService';
