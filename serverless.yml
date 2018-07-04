@@ -1,0 +1,19 @@
+service:
+  name: filmweb-scratcher
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  getFilm:
+    handler: src/app.getFilm
+    environment:
+      FILMWEB_SEARCH_URI: http://www.filmweb.pl/films/search
+    events:
+      - http:
+          method: post
+          path: get-film

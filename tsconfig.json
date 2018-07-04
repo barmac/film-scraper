@@ -7,11 +7,14 @@
     "alwaysStrict": true,
     "moduleResolution": "node",
     "sourceMap": true,
+    "lib": [
+      "es5",
+      "es2015.promise"
+    ],
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
       "*": [
-        "node_modules/*",
         "src/types/*"
       ]
     }
@@ -20,6 +23,7 @@
     "src/**/*"
   ],
   "exclude": [
+    "node_modules",
     "src/**/*.spec.ts",
     "src/**/*.mock.ts"
   ]
