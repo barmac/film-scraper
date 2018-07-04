@@ -1,5 +1,4 @@
-import axios, { AxiosResponse, AxiosStatic } from 'axios';
-import cheerio from 'cheerio';
+import { AxiosResponse, AxiosStatic } from 'axios';
 
 export class ScraperService {
   constructor(
@@ -23,5 +22,3 @@ export class ScraperService {
     return this.cheerio.load(webpage);
   }
 }
-
-export const scraperService = new ScraperService(axios, cheerio);

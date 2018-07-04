@@ -1,12 +1,11 @@
 import { Film } from './film';
 import { GetFilmWithScraperStrategy, GetFilmStrategy } from './strategies';
-import { scraperService } from '../scraper';
 
 export class FilmService {
   private getFilmWithScraperStrategy: GetFilmStrategy;
 
   constructor() {
-    this.getFilmWithScraperStrategy = new GetFilmWithScraperStrategy(scraperService);
+    this.getFilmWithScraperStrategy = new GetFilmWithScraperStrategy();
   }
 
   async getFilm(title: string): Promise<Film> {

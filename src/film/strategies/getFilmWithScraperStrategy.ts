@@ -1,3 +1,6 @@
+import axios from 'axios';
+import cheerio from 'cheerio';
+
 import { GetFilmStrategy } from './getFilmStrategy';
 import { Film } from '../film';
 import { filmwebSearchUri } from '../../config/filmwebConfig';
@@ -8,11 +11,17 @@ const ratingsQuery = '.resultsList .hits__item .filmPreview__rateBox';
 
 
 export class GetFilmWithScraperStrategy implements GetFilmStrategy {
-  constructor(private scraper: ScraperService) {}
+  private baseUri: string;
+  private scraper: ScraperService;
+
+  constructor() {
+    this.baseUri = filmwebSearchUri;
+    this.scraper = new ScraperService(axios, cheerio);
+  }
 
   async getFilmByTitle(title: string): Promise<Film> {
     const params = this.getSearchQuery(title);
-    const $: CheerioStatic = await this.scraper.getParsedWebpage(filmwebSearchUri, params);
+    const $: CheerioStatic = await this.scraper.getParsedWebpage(this.baseUri, params);
 
     const results = this.getResultsList($);
 
