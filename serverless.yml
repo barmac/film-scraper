@@ -15,5 +15,10 @@ functions:
       FILMWEB_SEARCH_URI: http://www.filmweb.pl/films/search
     events:
       - http:
-          method: post
-          path: get-film
+          method: get
+          path: films
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                title: true

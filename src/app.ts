@@ -29,10 +29,10 @@ export const getFilm: Handler = async (event: APIGatewayEvent, context: Context,
 };
 
 function extractTitle(event: APIGatewayEvent): string {
-  if (!event.body) {
+  if (!event.queryStringParameters || !event.queryStringParameters.title) {
     throw new Error(errors.invalidTitle);
   }
-  const { title } = JSON.parse(event.body);
+  const { title } = event.queryStringParameters;
 
   return title;
 }
