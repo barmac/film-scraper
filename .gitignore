@@ -32,3 +32,6 @@ typings/
 
 # Built app
 dist/**/*
+
+# temporary webpack files
+.webpack

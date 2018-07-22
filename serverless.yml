@@ -3,6 +3,7 @@ service:
 
 plugins:
   - serverless-webpack
+  - serverless-offline
 
 provider:
   name: aws
@@ -10,7 +11,7 @@ provider:
 
 functions:
   getFilm:
-    handler: src/app.getFilm
+    handler: src/appRoutes.getFilm
     environment:
       FILMWEB_SEARCH_URI: http://www.filmweb.pl/films/search
     events:
