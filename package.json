@@ -1,6 +1,6 @@
 {
   "name": "filmweb-scraper",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A simple web scraper intended to seek and save Filmweb average movie ratings.",
   "main": "app.js",
   "scripts": {
