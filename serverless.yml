@@ -44,16 +44,10 @@ resources:
           -
             AttributeName: title
             AttributeType: S
-          -
-            AttributeName: averageRating
-            AttributeType: N
         KeySchema:
           -
             AttributeName: title
             KeyType: HASH
-          -
-            AttributeName: averageRating
-            KeyType: N
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

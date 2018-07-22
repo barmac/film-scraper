@@ -12,10 +12,12 @@ export class FilmDao {
 
   async getFilmByTitle(title: string): Promise<Film> {
     const query = this.getQueryParams(title);
-    const { Item }: DocumentClient.GetItemOutput = await this.client.get(query).promise();
-    const film = this.extractFilm(Item);
+    const { Item: item }: DocumentClient.GetItemOutput = await this.client.get(query).promise();
+    if (!item) {
+      return;
+    }
 
-    return film;
+    return this.extractFilm(item);
   }
 
   async saveFilm(film: Film): Promise<Film> {

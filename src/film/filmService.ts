@@ -12,6 +12,11 @@ export class FilmService {
   }
 
   async getFilm(title: string): Promise<Film> {
+    const filmFromDb: Film = await this.dao.getFilmByTitle(title);
+    if (filmFromDb) {
+      return filmFromDb;
+    }
+
     const film: Film = await this.getFilmByTitle(title, this.getFilmWithScraperStrategy);
     await this.dao.saveFilm(film);
 
