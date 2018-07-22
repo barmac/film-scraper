@@ -1,8 +1,11 @@
-import { APIGatewayEvent } from 'aws-lambda';
-
 import { Film, FilmService } from './film';
 
-export interface Response {
+export interface AppRequest {
+  body: string;
+  queryStringParameters: { [param: string]: string };
+}
+
+export interface AppResponse {
   statusCode: number;
   body?: string;
 }
@@ -18,12 +21,12 @@ const errorResponses = {
   internalServerError: { statusCode: 500, body: JSON.stringify({}) },
 };
 
-class AppController {
+export default class AppController {
   constructor(private filmService: FilmService) { }
 
-  async getFilm(event: APIGatewayEvent) {
+  async getFilm(request: AppRequest): Promise<AppResponse> {
     try {
-      const title: string = this.extractTitle(event);
+      const title: string = this.extractTitle(request);
       this.validateTitle(title);
 
       const film: Film = await this.filmService.getFilm(title);
@@ -31,20 +34,20 @@ class AppController {
 
       const response = {
         statusCode: 200,
-        body: JSON.stringify(film.toJson()),
+        body: JSON.stringify(film),
       };
 
       return response;
     } catch (error) {
-      return this.handleError(error, event);
+      return this.handleError(error, request);
     }
   }
 
-  private extractTitle(event: APIGatewayEvent): string {
-    if (!event.queryStringParameters || !event.queryStringParameters.title) {
+  private extractTitle(request: AppRequest): string {
+    if (!request.queryStringParameters || !request.queryStringParameters.title) {
       throw new Error(ResponseError.invalidTitle);
     }
-    const { title } = event.queryStringParameters;
+    const { title } = request.queryStringParameters;
 
     return title;
   }
@@ -61,17 +64,15 @@ class AppController {
     }
   }
 
-  private handleError(error: Error, event: APIGatewayEvent): Response {
+  private handleError(error: Error, request: AppRequest): AppResponse {
     switch (error.message) {
       case ResponseError.invalidTitle:
         return errorResponses.invalidTitle;
       case ResponseError.notFound:
         return errorResponses.notFound;
       default:
-        console.error('Unexpected error', event, error);
+        console.error('Unexpected error', request, error);
         return errorResponses.internalServerError;
     }
   }
 }
-
-export default new AppController(new FilmService());

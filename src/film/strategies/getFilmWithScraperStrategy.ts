@@ -36,7 +36,7 @@ export class GetFilmWithScraperStrategy implements GetFilmStrategy {
     const filmTitle = firstHit.data('title');
     const rating = this.getFirstRating($).data('rate');
 
-    return new Film(filmTitle, rating);
+    return { title: filmTitle, averageRating: rating };
   }
 
   private getSearchQuery(searchTerm: string): { q: string } {
