@@ -29,15 +29,17 @@ export default class AppController {
       const title: string = this.extractTitle(request);
       this.validateTitle(title);
 
-      const film: Film = await this.filmService.getFilm(title);
-      this.validateFilm(film);
+      const filmFromDb: Film = await this.filmService.getFilmFromDb(title);
+      if (filmFromDb) {
+        return this.getSuccessfulResponse(filmFromDb);
+      }
 
-      const response = {
-        statusCode: 200,
-        body: JSON.stringify(film),
-      };
+      const filmFromScraper: Film = await this.filmService.getFilmWithScraper(title);
+      this.validateFilm(filmFromScraper);
 
-      return response;
+      await this.filmService.saveFilm(filmFromScraper);
+
+      return this.getSuccessfulResponse(filmFromScraper);
     } catch (error) {
       return this.handleError(error, request);
     }
@@ -62,6 +64,13 @@ export default class AppController {
     if (!film) {
       throw new Error(ResponseError.notFound);
     }
+  }
+
+  private getSuccessfulResponse(body: any): AppResponse {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(body),
+    };
   }
 
   private handleError(error: Error, request: AppRequest): AppResponse {

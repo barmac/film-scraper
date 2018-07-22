@@ -42,8 +42,27 @@ describe('AppController', () => {
     expect(response.statusCode).toBe(404);
   });
 
-  it('should return film if it was returned by FilmService', async () => {
-    FilmService.prototype.getFilm = jest.fn().mockResolvedValueOnce(mockFilm);
+  it('should return film if it was returned from db', async () => {
+    FilmService.prototype.getFilmFromDb = jest.fn().mockResolvedValueOnce(mockFilm);
+
+    const mockRequest: AppRequest = {
+      body: '',
+      queryStringParameters: {
+        'title': 'notExistingFilm',
+      },
+    };
+
+    const appController = new AppController(new FilmService());
+    const response: AppResponse = await appController.getFilm(mockRequest);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toBe(JSON.stringify(mockFilm));
+  });
+
+
+  it('should return film if it was returned by scraper', async () => {
+    FilmService.prototype.getFilmFromDb = jest.fn().mockResolvedValueOnce(undefined);
+    FilmService.prototype.getFilmWithScraper = jest.fn().mockResolvedValueOnce(mockFilm);
 
     const mockRequest: AppRequest = {
       body: '',

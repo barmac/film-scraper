@@ -11,19 +11,15 @@ export class FilmService {
     this.getFilmWithScraperStrategy = new GetFilmWithScraperStrategy();
   }
 
-  async getFilm(title: string): Promise<Film> {
-    const filmFromDb: Film = await this.dao.getFilmByTitle(title);
-    if (filmFromDb) {
-      return filmFromDb;
-    }
-
-    const film: Film = await this.getFilmByTitle(title, this.getFilmWithScraperStrategy);
-    await this.dao.saveFilm(film);
-
-    return film;
+  getFilmFromDb(title: string): Promise<Film> {
+    return this.dao.getFilmByTitle(title);
   }
 
-  private getFilmByTitle(title: string, strategy: GetFilmStrategy): Promise<Film> {
-    return strategy.getFilmByTitle(title);
+  getFilmWithScraper(title: string): Promise<Film> {
+    return this.getFilmWithScraperStrategy.getFilmByTitle(title);
+  }
+
+  saveFilm(film: Film): Promise<Film> {
+    return this.dao.saveFilm(film);
   }
 }
