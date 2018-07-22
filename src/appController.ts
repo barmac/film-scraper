@@ -19,11 +19,7 @@ const errorResponses = {
 };
 
 class AppController {
-  private filmService: FilmService;
-
-  constructor() {
-    this.filmService = new FilmService();
-  }
+  constructor(private filmService: FilmService) { }
 
   async getFilm(event: APIGatewayEvent) {
     try {
@@ -78,4 +74,4 @@ class AppController {
   }
 }
 
-export default new AppController();
+export default new AppController(new FilmService());
