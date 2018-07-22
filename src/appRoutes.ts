@@ -1,7 +1,7 @@
-import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
+import { APIGatewayEvent } from 'aws-lambda';
 
-import appController from './appController';
+import appController, { Response } from './appController';
 
-export function getFilm(event: APIGatewayEvent, context: Context, callback: Callback) {
-  return appController.getFilm(event, context, callback);
+export function getFilm(event: APIGatewayEvent): Promise<Response> {
+  return appController.getFilm(event);
 }

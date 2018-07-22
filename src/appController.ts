@@ -1,10 +1,21 @@
-import { APIGatewayEvent, Callback, Context, Handler } from 'aws-lambda';
+import { APIGatewayEvent } from 'aws-lambda';
 
 import { Film, FilmService } from './film';
 
-const errors = {
-  invalidTitle: 'invalid title',
-  notFound: 'not found',
+export interface Response {
+  statusCode: number;
+  body?: string;
+}
+
+enum ResponseError {
+  invalidTitle = 'invalid title',
+  notFound = 'not found',
+}
+
+const errorResponses = {
+  invalidTitle: { statusCode: 400, body: JSON.stringify({ error: ResponseError.invalidTitle }) },
+  notFound: { statusCode: 404, body: JSON.stringify({ error: ResponseError.notFound }) },
+  internalServerError: { statusCode: 500, body: JSON.stringify({}) },
 };
 
 class AppController {
@@ -14,7 +25,7 @@ class AppController {
     this.filmService = new FilmService();
   }
 
-  getFilm: Handler = async (event: APIGatewayEvent, context: Context, cb: Callback) => {
+  async getFilm(event: APIGatewayEvent) {
     try {
       const title: string = this.extractTitle(event);
       this.validateTitle(title);
@@ -27,15 +38,15 @@ class AppController {
         body: JSON.stringify(film.toJson()),
       };
 
-      cb(null, response);
+      return response;
     } catch (error) {
-      this.handleError(error, event, cb);
+      return this.handleError(error, event);
     }
   }
 
   private extractTitle(event: APIGatewayEvent): string {
     if (!event.queryStringParameters || !event.queryStringParameters.title) {
-      throw new Error(errors.invalidTitle);
+      throw new Error(ResponseError.invalidTitle);
     }
     const { title } = event.queryStringParameters;
 
@@ -44,27 +55,25 @@ class AppController {
 
   private validateTitle(title: string): void {
     if (typeof title !== 'string' || !title.length) {
-      throw new Error(errors.invalidTitle);
+      throw new Error(ResponseError.invalidTitle);
     }
   }
 
   private validateFilm(film: Film): void {
     if (!film) {
-      throw new Error(errors.notFound);
+      throw new Error(ResponseError.notFound);
     }
   }
 
-  private handleError(error: Error, event: APIGatewayEvent, cb: Callback): void {
+  private handleError(error: Error, event: APIGatewayEvent): Response {
     switch (error.message) {
-      case errors.invalidTitle:
-        cb(null, { statusCode: 400, body: JSON.stringify({ error: errors.invalidTitle }) });
-        break;
-      case errors.notFound:
-        cb(null, { statusCode: 404, body: JSON.stringify({ error: errors.notFound }) });
-        break;
+      case ResponseError.invalidTitle:
+        return errorResponses.invalidTitle;
+      case ResponseError.notFound:
+        return errorResponses.notFound;
       default:
         console.error('Unexpected error', event, error);
-        cb(null, { statusCode: 500, body: JSON.stringify({}) });
+        return errorResponses.internalServerError;
     }
   }
 }
