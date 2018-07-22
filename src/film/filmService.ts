@@ -1,15 +1,19 @@
 import { Film } from './film';
-import { GetFilmWithScraperStrategy, GetFilmStrategy } from './strategies';
+import { FilmDao } from './filmDao';
+import { GetFilmStrategy, GetFilmWithScraperStrategy } from './strategies';
 
 export class FilmService {
+  private dao: FilmDao;
   private getFilmWithScraperStrategy: GetFilmStrategy;
 
   constructor() {
+    this.dao = new FilmDao();
     this.getFilmWithScraperStrategy = new GetFilmWithScraperStrategy();
   }
 
   async getFilm(title: string): Promise<Film> {
     const film: Film = await this.getFilmByTitle(title, this.getFilmWithScraperStrategy);
+    await this.dao.saveFilm(film);
 
     return film;
   }

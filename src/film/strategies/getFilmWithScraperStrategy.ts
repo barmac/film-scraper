@@ -3,7 +3,7 @@ import cheerio from 'cheerio';
 
 import { GetFilmStrategy } from './getFilmStrategy';
 import { Film } from '../film';
-import { filmwebSearchUri } from '../../config/filmwebConfig';
+import { filmwebSearchUri } from '../../config';
 import { ScraperService } from '../../scraper';
 
 const resultsQuery = '.resultsList .hits__item .dataHit';

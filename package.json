@@ -4,7 +4,9 @@
   "description": "A simple web scraper intended to seek and save Filmweb average movie ratings.",
   "main": "app.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "install": "sls dynamodb install",
+    "start": "node dist/app.js --stage production",
+    "start:local": "sls offline start --stage local",
     "build": "npm run lint && tsc",
     "test": "jest --coverage --detectOpenHandles",
     "debug": "npm run build && npm run watch-debug",
@@ -16,6 +18,7 @@
   "dependencies": {
     "axios": "0.18.0",
     "cheerio": "1.0.0-rc.2",
+    "serverless-dynamodb-client": "0.0.2",
     "source-map-support": "0.5.0"
   },
   "devDependencies": {
@@ -25,6 +28,7 @@
     "@types/node": "10.5.1",
     "jest": "23.2.0",
     "nodemon": "1.17.5",
+    "serverless-dynamodb-local": "0.2.30",
     "serverless-offline": "3.25.6",
     "serverless-webpack": "4.0.0",
     "ts-jest": "22.4.6",

@@ -3,17 +3,27 @@ service:
 
 plugins:
   - serverless-webpack
+  - serverless-dynamodb-local
   - serverless-offline
 
 provider:
   name: aws
   runtime: nodejs8.10
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource:
+        - { "Fn::GetAtt": ["FilmsDynamoDBTable", "Arn" ] }
 
 functions:
   getFilm:
     handler: src/appRoutes.getFilm
     environment:
+      AWS_REGION: ${self:custom.region}
       FILMWEB_SEARCH_URI: http://www.filmweb.pl/films/search
+      NODE_ENV: ${opt:stage}
     events:
       - http:
           method: get
@@ -23,3 +33,33 @@ functions:
             parameters:
               querystrings:
                 title: true
+
+resources:
+  Resources:
+    FilmsDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: filmsTable
+        AttributeDefinitions:
+          -
+            AttributeName: title
+            AttributeType: S
+          -
+            AttributeName: averageRating
+            AttributeType: N
+        KeySchema:
+          -
+            AttributeName: title
+            KeyType: HASH
+          -
+            AttributeName: averageRating
+            KeyType: N
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+custom:
+  dynamodb:
+    start:
+      migrate: true
+  region: ${opt:region, self:provider.region}
