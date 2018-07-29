@@ -33,5 +33,6 @@ typings/
 # Built app
 dist/**/*
 
-# temporary webpack files
+# temporary files
 .webpack
+.serverless
