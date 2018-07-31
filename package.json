@@ -5,14 +5,9 @@
   "main": "app.js",
   "scripts": {
     "install": "sls dynamodb install",
-    "start": "node dist/app.js --stage production",
-    "start:local": "sls offline start --stage local",
+    "start": "sls offline start --stage local",
     "build": "npm run lint && tsc",
     "test": "jest --coverage --detectOpenHandles",
-    "debug": "npm run build && npm run watch-debug",
-    "watch": "npm run watch-ts & nodemon dist/app.js",
-    "watch-debug": "npm run watch-ts && nodemon --inspect dist/app.js",
-    "watch-ts": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
